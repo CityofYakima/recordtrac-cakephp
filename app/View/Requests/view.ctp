@@ -511,6 +511,7 @@
 	</div>
 	<div class="col-sm-4">
     <?php
+      
       if ($this->Session->read('Auth.User') && $request["Request"]["status_id"] == 4){
         $statusText =  "Overdue";
         $statusClass = "danger"; 
@@ -532,7 +533,22 @@
 	  <div class="well status status-<?php echo $statusClass; ?> text-center">
 	    <span class="glyphicon <?php echo $statusGlyph; ?>"></span>&nbsp; <?php echo $statusText; ?>
 	  </div>
-	  <?php 
+	  <?php
+      if($this->Session->read('Auth.User.is_admin') && $request["Request"]["published"]){
+        echo $this->Html->link(
+        	        "<span class=\"glyphicon glyphicon glyphicon-eye-close\"></span> Make Request Private",
+        		      "unpublish/".$request["Request"]["id"]."/",
+                  array('escape' => false, 'class' => 'btn btn-block btn-danger'),"Are you sure you wish to make this request private?"
+        );
+      }else if($this->Session->read('Auth.User.is_admin') && !$request["Request"]["published"]){
+        echo $this->Html->link(
+        	        "<span class=\"glyphicon glyphicon glyphicon-eye-open\"></span> Make Request Public",
+        		      "publish/".$request["Request"]["id"]."/",
+                  array('escape' => false, 'class' => 'btn btn-block btn-success')
+        );
+      }
+      
+
       if($this->Session->read('Auth.User.is_admin') && $request["Request"]["status_id"] == 2){
         echo $this->Html->link(
         	        "<span class=\"glyphicon glyphicon-arrow-down\"></span> Reopen Request",

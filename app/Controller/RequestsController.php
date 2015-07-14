@@ -200,6 +200,7 @@ class RequestsController extends AppController {
           'order' => array('Request.id' => 'desc')
     		);
     }else{
+      $conditions["and"][] = "Request.published = 1";
       //paginate results
       $this->paginate = array(
   				'limit' => 15,
@@ -211,7 +212,7 @@ class RequestsController extends AppController {
 		$records = $this->paginate('Request');
 		
 		//error handling in case there are no requests found
-		if( ! empty($records)){
+		if( !empty($records)){
 			$this->set('results', $records);
 		}else{
 			$this->Session->setFlash('No requests found.', 'danger');
@@ -238,6 +239,10 @@ class RequestsController extends AppController {
     $this->set("title_for_layout","Request " . $id . " - View a Request - " . $this->getAgencyName());
     $request = $this->Request->find('first', array('conditions' => array('Request.id' => $id), 'recursive' => 2));
     $this->set('request', $request);
+
+    if($request["Request"]["published"] == '' && !$this->Session->read('Auth.User')){
+      throw new UnauthorizedException(__('This request has not been published by a staff member'));
+    }
 	    
     //organize and count reponses
     $responses = array_merge($request["Record"], $request["Note"]);
@@ -495,7 +500,7 @@ class RequestsController extends AppController {
           if ($this->Session->read('Auth.User')){
             $this->Session->setFlash('<h4>The request has been submitted!</h4><p class="lead">The requester has been notified via email that they can expect to hear a response from the '. $this->getAgencyName() .' in the next ' . $this->getResponseDays() . ' business days. Requester will be automatically contacted with any updates.</p>', 'success');
           }else{
-            $this->Session->setFlash('<h4>Your request has been submitted!</h4><p class="lead">You can expect a response from the  '. $this->getAgencyName() .'  in the next ' . $this->getResponseDays() . ' business days. If you have provided an email, you will be contacted via email with any updates.</p> <p class="lead">All messages from the   '. $this->getAgencyName() .' and/or the information and documents you requested will be posted to this page. You can access <a href="/requests/view/' . $requestID . '">this page</a> at any time.</p>', 'success');
+            $this->Session->setFlash('<h4>Your request has been submitted!</h4><p class="lead">You can expect a response from the  '. $this->getAgencyName() .'  in the next ' . $this->getResponseDays() . ' business days. If you have provided an email, you will be contacted via email with any updates.</p> <p class="lead">Once your request is published by a staff member, all messages from the   '. $this->getAgencyName() .' and/or the information and documents you requested will be posted to this page. You can access <a href="/requests/view/' . $requestID . '">this page</a> at any time.</p>', 'success');
           }
           $this->redirect(array('action' => 'view', $this->Request->id));
         }
@@ -655,5 +660,125 @@ class RequestsController extends AppController {
     }
     $this->redirect(array('action' => 'view', $this->Request->id)); 
 	}
+  
+  public function publish($id=null){
+    App::uses('CakeEmail', 'Network/Email');
+
+    $this->Request->id = $id;
+    if ($id != null && $this->Session->read('Auth.User.is_admin')){
+      $this->request->data["Request"]["published"] = "1";
+      
+      if($this->Request->save($this->request->data)){
+        $this->loadModel('Note');
+        $note = array();
+        $note["Note"]["request_id"] = $id;
+        $note["Note"]["type_id"] = 1;
+        $note["Note"]["text"] = "This request published by a staff member.";
+        $note["Note"]["user_id"] = $this->Session->read('Auth.User.id');
+        if($this->Note->save($note)){
+          $requestID = filter_var($id, FILTER_VALIDATE_INT);
+          
+          //get the subscribers
+          $this->loadModel('Subscriber');
+          $subscribers = $this->Subscriber->find('all', array(
+            'conditions' => array('Subscriber.request_id' => $requestID)
+          ));
+          
+          //get the point of contact
+          $this->loadModel('Owner');
+          $owner = $this->Owner->find('first', array(
+            'conditions' => array('Owner.request_id' => $requestID)
+          ));
+  
+          foreach ($subscribers as $subscriber){
+            //make sure they are set to receive notifications, and have a valid email
+            if($subscriber["Subscriber"]["should_notify"] == 1 && $subscriber["User"]["email"] != ''){
+              //email subscriber
+              $Email = new CakeEmail();
+              $Email->template('requestupdated')
+                  ->emailFormat('html')
+                  ->to($subscriber["User"]["email"])
+                  ->from($this->getfromEmail())
+                  ->bcc($this->getBccEmail())
+                  ->subject($this->getAgencyName().' Public Disclosure Request #' .$requestID ." - Updated")
+                  ->viewVars( array(
+                      'agencyName' => $this->getAgencyName(),
+                      'page' => '/requests/view/' . $requestID,
+                      'ownerEmail' => $owner["User"]["email"],
+                      'requestID' => $requestID,
+                      'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
+                      'note' => $note["Note"]["text"]
+                  ))
+                  ->send();
+            }
+          }
+        }
+        $this->Session->setFlash('<h4>The request has been published!</h4><p class="lead">The requester has been notified via email that the request was published and a note has been added to the request.</p>', 'success');
+      }else{
+        $this->Session->setFlash('<h4>Error</h4><p class="lead">Could not update request at this time.</p>', 'danger');
+      }
+      $this->redirect(array('action' => 'view', $this->Request->id)); 
+    }
+  }
+  
+  public function unpublish($id=null){
+    App::uses('CakeEmail', 'Network/Email');
+
+    $this->Request->id = $id;
+    if ($id != null && $this->Session->read('Auth.User.is_admin')){
+      $this->request->data["Request"]["published"] = "0";
+      
+      if($this->Request->save($this->request->data)){
+        $this->loadModel('Note');
+        $note = array();
+        $note["Note"]["request_id"] = $id;
+        $note["Note"]["type_id"] = 1;
+        $note["Note"]["text"] = "This request has been made private by a staff member.";
+        $note["Note"]["user_id"] = $this->Session->read('Auth.User.id');
+        if($this->Note->save($note)){
+          $requestID = filter_var($id, FILTER_VALIDATE_INT);
+          
+          //get the subscribers
+          $this->loadModel('Subscriber');
+          $subscribers = $this->Subscriber->find('all', array(
+            'conditions' => array('Subscriber.request_id' => $requestID)
+          ));
+          
+          //get the point of contact
+          $this->loadModel('Owner');
+          $owner = $this->Owner->find('first', array(
+            'conditions' => array('Owner.request_id' => $requestID)
+          ));
+  
+          foreach ($subscribers as $subscriber){
+            //make sure they are set to receive notifications, and have a valid email
+            if($subscriber["Subscriber"]["should_notify"] == 1 && $subscriber["User"]["email"] != ''){
+              //email subscriber
+              $Email = new CakeEmail();
+              $Email->template('requestupdated')
+                  ->emailFormat('html')
+                  ->to($subscriber["User"]["email"])
+                  ->from($this->getfromEmail())
+                  ->bcc($this->getBccEmail())
+                  ->subject($this->getAgencyName().' Public Disclosure Request #' .$requestID ." - Updated")
+                  ->viewVars( array(
+                      'agencyName' => $this->getAgencyName(),
+                      'page' => '/requests/view/' . $requestID,
+                      'ownerEmail' => $owner["User"]["email"],
+                      'requestID' => $requestID,
+                      'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
+                      'note' => $note["Note"]["text"]
+                  ))
+                  ->send();
+            }
+          }
+        }
+        $this->Session->setFlash('<h4>The request has been made private!</h4><p class="lead">The requester has been notified via email that the request was made private and a note has been added to the request.</p>', 'success');
+      }else{
+        $this->Session->setFlash('<h4>Error</h4><p class="lead">Could not update request at this time.</p>', 'danger');
+      }
+      $this->redirect(array('action' => 'view', $this->Request->id)); 
+    }
+  }
 
 }
