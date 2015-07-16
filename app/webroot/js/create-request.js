@@ -24,8 +24,8 @@ $(document).ready(function(){
         content: "Only employees will be able to view this information.",
         placement: "bottom",
        
-*/ trigger: 'focus'
-    });
+trigger: 'focus'
+    });*/ 
     $("#RequestRequestStart").popover({
         html: true,
         content: "Choose a date when the records you are requesting should start. If no end date is chosen, the end date for the request will be today.",
