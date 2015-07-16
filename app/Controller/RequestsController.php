@@ -495,7 +495,7 @@ class RequestsController extends AppController {
           if ($this->Session->read('Auth.User')){
             $this->Session->setFlash('<h4>The request has been submitted!</h4><p class="lead">The requester has been notified via email that they can expect to hear a response from the '. $this->getAgencyName() .' in the next ' . $this->getResponseDays() . ' business days. Requester will be automatically contacted with any updates.</p>', 'success');
           }else{
-            $this->Session->setFlash('<h4>Your request has been submitted!</h4><p class="lead">You can expect a response from the  '. $this->getAgencyName() .'  in the next ' . $this->getResponseDays() . ' business days. If you have provided an email, you will be contacted via email with any updates.</p>', 'success');
+            $this->Session->setFlash('<h4>Your request has been submitted!</h4><p class="lead">You can expect a response from the  '. $this->getAgencyName() .'  in the next ' . $this->getResponseDays() . ' business days. You will be contacted via email with any updates.</p>', 'success');
           }
           $this->redirect(array('action' => 'view', $this->Request->id));
         }
