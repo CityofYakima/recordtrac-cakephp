@@ -254,6 +254,7 @@
                       'between' => '<div class="col-sm-9">',
                       'after' => '</div>',
                       'rows' => 1));
+/*
             echo $this->Form->input('filename',
                 array('type' => 'file', 
                       'div' => 'form-group',
@@ -261,6 +262,7 @@
                       'class' => 'form-control',
                       'between' => '<div class="col-sm-9">',
                       'after' => '<p class="help-block">Maximum Upload File Size: '.$upload_mb.'MB</p></div>'));
+*/
             echo $this->Form->input('url',
                 array('type' => 'text', 
                       'div' => 'form-group',

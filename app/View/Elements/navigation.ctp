@@ -17,7 +17,9 @@
     <div class="collapse navbar-collapse pull-left" id="mainnav">
       <ul class="nav navbar-nav">
         <li><?php echo $this->Html->link('New Request', '/requests/create'); ?></li>
+        <?php  if ($this->Session->read('Auth.User')): ?>
         <li><?php echo $this->Html->link('Explore Requests', '/requests'); ?></li>
+        <?php endif; ?>
         <li><?php echo $this->Html->link('About', '/about'); ?></li>
       </ul>
       

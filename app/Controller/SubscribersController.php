@@ -3,7 +3,7 @@ class SubscribersController extends AppController {
   
   public function beforeFilter(){
     parent::beforeFilter();
-    $this->Auth->allow('subscribe');
+    //$this->Auth->allow('subscribe');
   }
   
   public function subscribe() {

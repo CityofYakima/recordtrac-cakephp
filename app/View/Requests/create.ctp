@@ -9,8 +9,8 @@
 <div class="row">
 	<div class="col-sm-7">
 	  <h1>Request a new record</h1>
-	  <p>Use RecordTrac to request copies of specific documents, photos, emails, texts, audio recordings, electronic information and data in the <?php echo $agencyName; ?>'s databases.</p>
-	  
+	  <p>Use RecordTrac to request copies of specific documents, electronic information, and data in the <?php echo $agencyName; ?>'s databases.</p>
+	  <div class="alert alert-warning"><span class="glyphicon glyphicon-exclamation-sign"></span> The <?php echo $agencyName; ?> recently made changes to RecordTrac. <a href="/about/#change">Read the Explanation</a> </div>
     <?php
       $labelPerson = "Your";
       echo $this->Form->create('Request');
@@ -18,7 +18,8 @@
                               array('type' => 'textarea', 
                                     'placeholder' => 'Describe your request. Be as specific as possible.',
                                     'before' => '<p class="lead">What are you trying to find?</p>', 
-                                    'label' => '<div class="alert alert-info"><span class="glyphicon glyphicon-exclamation-sign glyphicon-info"></span> Everything in this request box will be displayed publicly. <a href="/about#why">Why?</a></div>',
+                                    //'label' => '<div class="alert alert-info"><span class="glyphicon glyphicon-exclamation-sign glyphicon-info"></span> Everything in this request box will be displayed publicly. <a href="/about#why">Why?</a></div>',
+                                    'label' => false,
                                     'class' => 'form-control'));
       echo "<div id=\"not_public_record\"></div>";
       echo "<p class=\"lead\">Select a Date Range for the Request <small class=\"department_optional\">(optional)</small></p>";

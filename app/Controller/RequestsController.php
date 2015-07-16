@@ -3,10 +3,10 @@ class RequestsController extends AppController {
   
   public function beforeFilter(){
     parent::beforeFilter();
-    $this->Auth->allow('index','track','dateSort', 'view', 'is_public_record', 'create', 'unsubscribe');
+    $this->Auth->allow('dateSort', 'is_public_record','create');
   }
   
-  var $permissions = array('updateTags'); //define allowed action for logged in users (staff)
+  var $permissions = array('updateTags','index','track','unsubscribe','view'); //define allowed action for logged in users (staff)
   
   public $components = array("BusinessDays","RequestHandler");
 

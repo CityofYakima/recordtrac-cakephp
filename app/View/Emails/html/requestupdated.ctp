@@ -270,7 +270,7 @@
 					<td>
 						
 						<h3>Public Records Request Updated</h3>
-						<p class="lead">A public records request from the <?php echo $agencyName; ?> that you are subscribed to has been updated. You can always view the update on the request page, <a href='<?php echo Router::fullbaseUrl().$page; ?>'><?php echo Router::fullbaseUrl().$page; ?></a>.</p>
+						<p class="lead">A public records request from the <?php echo $agencyName; ?> that you are subscribed to has been updated. <!-- You can always view the update on the request page, <a href='<?php echo Router::fullbaseUrl().$page; ?>'><?php echo Router::fullbaseUrl().$page; ?></a>. --></p>
 						
 						<?php
               if(isset($note) && $note != ''){

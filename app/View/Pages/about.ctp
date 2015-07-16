@@ -13,10 +13,14 @@
 			<ul style="list-style: none;">
 			<li><a href="#what">What is RecordTrac?</a> </li>
 			<li><a href="#why">Why was RecordTrac made?</a> </li>
-			<li><a href="#all request table">Where can I find all the requests submitted through RecordTrac?</a></li>
+			<li><a href="#responsibility">What is the <?php echo $agencyName; ?>'s Responsibility?</a> </li>
+			<li><a href="#change">Explanation of Change</a></li>
+			<li><a href="#contact">Who should I contact if I had questions?</a> </li>
+			<li><a href="#redeploy">What should I do if I want my agency to use RecordTrac?</a> </li>
+<!-- 			<li><a href="#all request table">Where can I find all the requests submitted through RecordTrac?</a></li> 
 			<li><a href="#show">Why can you show everyone my request?</a> </li>
 			<li><a href="#documents">Why aren't all documents uploaded on RecordTrac?</a> </li> 
-			<li><a href="#redeploy">What should I do if I want my agency to use RecordTrac?</a> </li>
+			<li><a href="#redeploy">What should I do if I want my agency to use RecordTrac?</a> </li>-->
 			
 			</ul>
 
@@ -24,17 +28,22 @@
 
 				<h4 id="what">What is RecordTrac?</h4>
 				<p>RecordTrac is a quick, simple way for you to submit a public records request to <?php echo $agencyName; ?>.</p>  
+<!--
 				<p><strong>Every message or record uploaded on this site is completely public.</strong> This makes it easier to understand what happens to every request.</p>
-				<br>
+				
+--><br>
 
 				<h4 id="why">Why was RecordTrac made?</h4>
 
 				<p>The 2013 Code for America fellows created RecordTrac with the City of Oakland. As public records requests became larger and more complex, city employees found coordinating a response to be difficult. The old software system no longer met their needs and many requests remained untracked.</p>
+<!--
 				<p>Members of the public complained they didn’t understand what happened after they submitted their requests and it took too long to get the records they needed.</p>
 				<p>By making everything completely transparent, you can know your request is fulfilled.</p>
-				<br>
+				
+--><br>
 
 
+<!--
 				<h4 id="all request table">Where can I find all the requests submitted through RecordTrac?</h4>
 				<p>RecordTrac displays all current and past records requests at <?php echo $this->Html->link($appUrl . '/requests', '/requests'); ?>. A description of what RecordTrac displays on this page can be found below:</p> 
 
@@ -75,7 +84,8 @@
 				<br>
 
 
-				<h4 id="show">Why can you show everyone my request?</h4>
+				<h4 id="show">Why can you show everyone my request?</h4>-->
+				<h4 id="responsibility">What is the <?php echo $agencyName; ?>'s Responsibility?</h4>
 				<p>The Washington State Public Records Act gives everyone access to documents, photos, emails, texts, audio recordings, and data about the <?php echo $agencyName; ?> and its business. This is why we can display your request and any responses from <?php echo $agencyName; ?> staff.</p>
 
 				<p>According to the Public Records Act, the <?php echo $agencyName; ?> must:</p>
@@ -90,17 +100,28 @@
 				</p>
 				<ul>
 					<li><a href="http://apps.leg.wa.gov/rcw/default.aspx?cite=42.56">Washington State Public Records Act</a></li>
+					<li><a href="http://www.yakimawa.gov/services/clerks/files/2012/04/Public-Disclosure-Policy-and-Fee-Schedule.pdf" target="_blank">Public Disclosure Policy and Fee Schedule</a> (pdf)</li>
 					<li><a href="<?php echo $agencyUrl; ?>"><?php echo $agencyName; ?> Homepage</a></li>
 				</ul>
-				<br>
-				<h4 id="documents">Why aren't all documents uploaded on RecordTrac?</h4>
+				
 				<p>The <?php echo $agencyName; ?> will not publicly release records or information that violates your right to privacy. This also includes records that will compromise your safety or the completion of a law enforcement investigation.</p>
 
-				<p>For example, many police reports contain sensitive information that can only be sent to the individuals directly involved in the crime or incident, and will not be released through RecordTrac. You will, however, better understand the number and types of records requests processed, even when the record itself cannot be uploaded due to sensitive data.</p>   
+				<p>For example, many police reports contain sensitive information that can only be sent to the individuals directly involved in the crime or incident, and will not be released<!--  through RecordTrac. You will, however, better understand the number and types of records requests processed, even when the record itself cannot be uploaded due to sensitive data -->.</p>   
+				
+				<br/>
+				<h4 id="change">Explanation of Change</h4>
+				<p>In October 2014, the <?php echo $agencyName; ?> launched RecordTrac, an online tool designed to streamline the public records request process. RecordTrac was intended to make it easier for people to submit public record requests and to allow real-time access to the <?php echo $agencyName; ?>&rsquo;s responses to records requests. Those goals were accomplished.</p>
+        <p>However, implementing RecordTrac has also resulted in unintended consequences, namely, the misuse of the system by some requestors. The number of generalized, voluminous records requests has significantly increased. Requests containing unsubstantiated accusations aimed at public employees have become commonplace. The use of RecordTrac for commercial and litigious purposes has spiked.</p>
+        <p>Regrettably, the negative effects of the misapplication of RecordTrac by some requestors have come to outweigh the benefits it offers. In light of that unfortunate reality, the <?php echo $agencyName; ?> has elected to discontinue its use of making RecordTrac public. If you currently have an open request, or are following a request, the documents will be provided to you through the contact information provided.</p>
+        <p>The decision to end the <?php echo $agencyName; ?>'s utilization of RecordTrac in this manner in no way affects its ability to meet its obligations under the Washington State Public Records Act (RCW 42.56). The <?php echo $agencyName; ?> will continue to provide responses to public records requests efficiently and effectively.</p>
+        <p>While utilizing RecordTrac to receive public records requests and respond to them held great promise, ultimately the unconstructive use of the system by some requestors made its continued use impractical. Regardless, the City Clerk’s office remains committed to exploring innovative methods and experimenting with emerging approaches in order to deliver the highest level of customer service possible.</p>
+
+				<br/>
 				
 				<h4 id="contact">Who should I contact if I have questions?</h4>
 				<p>The Clerks office at the <?php echo $agencyName; ?> handles the majority of our public records requests, you can email them at <?php echo $this->Text->autoLinkEmails('Public.Records@yakimawa.gov'); ?> or by calling 509-575-6000.</p>
 				
+				<br/>
 				<h4 id="redeploy">What should I do if I want my agency to use RecordTrac?</h4>
 				<p>RecordTrac is an open-source software project that can be redeployed by any municipality. If you want to reuse RecordTrac, visit the <a href="http://www.recordtrac.com" target="_blank">Code for America orginal project</a>, or the <a href="https://github.com/CityofYakima/recordtrac-cakephp" target="_blank">City of Yakima CakePHP port on github</a>.</p>
 

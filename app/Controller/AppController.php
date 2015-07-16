@@ -42,16 +42,16 @@ class AppController extends Controller {
         )
       ),
       'loginAction' => array(
-        'controller' => 'recordTrac',
-        'action' => 'index'
+        'controller' => 'requests',
+        'action' => 'create'
       ),
       'loginRedirect' => array(
-        'controller' => 'recordTrac',
-        'action' => 'index'
+        'controller' => 'requests',
+        'action' => 'create'
       ),
       'logoutRedirect' => array(
-        'controller' => 'recordTrac',
-        'action' => 'index'
+        'controller' => 'requests',
+        'action' => 'create'
       ),
       'authorize' => array('Controller')
     )
