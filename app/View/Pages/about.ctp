@@ -86,7 +86,7 @@
 
 				<h4 id="show">Why can you show everyone my request?</h4>-->
 				<h4 id="responsibility">What is the <?php echo $agencyName; ?>'s Responsibility?</h4>
-				<p>The Washington State Public Records Act gives everyone access to documents and data about the <?php echo $agencyName; ?> and its business. This is why we can display your request and any responses from <?php echo $agencyName; ?> staff.</p>
+				<p>The Washington State Public Records Act gives everyone access to documents and data about the <?php echo $agencyName; ?> and its business. <!-- This is why we can display your request and any responses from <?php echo $agencyName; ?> staff. --></p>
 
 				<p>According to the Public Records Act, the <?php echo $agencyName; ?> must:</p>
 				<ul>

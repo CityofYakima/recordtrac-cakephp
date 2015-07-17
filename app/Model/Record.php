@@ -11,7 +11,8 @@ class Record extends AppModel {
  	public $validate = array(
     'description' => array(
       'rule' => 'notEmpty'
-    ),
+    )/*
+,
     'filename' => array(
       'rule1' => array(
         'rule' => array(
@@ -57,6 +58,7 @@ class Record extends AppModel {
         'message' => 'File exceeds upload filesize limit'
       )
     )
+*/
   );
 
 }
