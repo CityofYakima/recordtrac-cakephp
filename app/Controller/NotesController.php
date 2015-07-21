@@ -13,7 +13,9 @@ class NotesController extends AppController {
     if (!empty($this->request->data)) {
       if($this->Note->save($this->request->data)){
         $requestID = filter_var($this->request->data["Note"]["request_id"], FILTER_VALIDATE_INT);
-        
+        $this->loadModel('Request');
+        $requestDetails = $this->Request->find('first', array('conditions' => array('Request.id' => $requestID), 'fields' => array('text')));
+
         //get the subscribers
         $this->loadModel('Subscriber');
         $subscribers = $this->Subscriber->find('all', array(
@@ -43,7 +45,8 @@ class NotesController extends AppController {
                     'ownerEmail' => $owner["User"]["email"],
                     'requestID' => $requestID,
                     'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
-                    'note' => $this->request->data["Note"]["text"]
+                    'note' => $this->request->data["Note"]["text"],
+                    'details' => $requestDetails["Request"]["text"]
                 ))
                 ->send();
           }
@@ -68,6 +71,8 @@ class NotesController extends AppController {
       $this->request->data["Note"] = $this->request->data["Extend"];
       if($this->Note->save($this->request->data)){
         $requestID = filter_var($this->request->data["Extend"]["request_id"], FILTER_VALIDATE_INT);
+        $this->loadModel('Request');
+        $requestDetails = $this->Request->find('first', array('conditions' => array('Request.id' => $requestID), 'fields' => array('text')));
         $extendDays = filter_var($this->request->data["Extend"]["days"], FILTER_SANITIZE_STRING);
 
         //get the subscribers
@@ -116,7 +121,8 @@ class NotesController extends AppController {
                     'ownerEmail' => $owner["User"]["email"],
                     'requestID' => $requestID,
                     'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
-                    'extend' => $this->request->data["Extend"]["text"]
+                    'extend' => $this->request->data["Extend"]["text"],
+                    'details' => $requestDetails["Request"]["text"]
                 ))
                 ->send();
           }
@@ -143,6 +149,7 @@ class NotesController extends AppController {
         $requestID = filter_var($this->request->data["Close"]["request_id"], FILTER_VALIDATE_INT);
         $this->loadModel('Request');
         $this->Request->id = $requestID;
+        $requestDetails = $this->Request->find('first', array('conditions' => array('Request.id' => $requestID), 'fields' => array('text')));
         $todayDT = date("Y-m-d H:i:s");
         $this->Request->saveField('status_id', '2'); 
         $this->Request->saveField('status_updated', $todayDT);
@@ -176,7 +183,8 @@ class NotesController extends AppController {
                     'ownerEmail' => $owner["User"]["email"],
                     'requestID' => $requestID,
                     'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
-                    'closed' => $this->request->data["Close"]["text"]
+                    'closed' => $this->request->data["Close"]["text"],
+                    'details' => $requestDetails["Request"]["text"]
                 ))
                 ->send();
           }

@@ -13,10 +13,13 @@ class RecordsController extends AppController {
     
     if (!empty($this->request->data)) {
       $requestID = filter_var($this->request->data["Record"]["request_id"], FILTER_VALIDATE_INT);
+      $this->loadModel('Request');
+      $requestDetails = $this->Request->find('first', array('conditions' => array('Request.id' => $requestID), 'fields' => array('text')));
       if ($this->Record->validates()) {
         //clean filename
-        $this->request->data["Record"]["filename"]["name"] = $this->FileSanitize->sanitize($this->request->data["Record"]["filename"]["name"]);
-        
+        if(isset($this->request->data["Record"]["filename"]["name"])){
+          $this->request->data["Record"]["filename"]["name"] = $this->FileSanitize->sanitize($this->request->data["Record"]["filename"]["name"]);
+        }
         // it validated logic
         if($this->Record->save($this->request->data)){
          
@@ -66,7 +69,8 @@ class RecordsController extends AppController {
                       'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
                       'description' => $this->request->data["Record"]["description"],
                       'fileupload' => $recordType,
-                      'url' => $url
+                      'url' => $url,
+                      'details' => $requestDetails["Request"]["text"]
                   ))
                   ->send();
             }
@@ -101,6 +105,8 @@ class RecordsController extends AppController {
     //clean variables
     $id = filter_var($id, FILTER_VALIDATE_INT);
     $requestID = filter_var($requestID, FILTER_VALIDATE_INT);
+    $this->loadModel('Request');
+    $requestDetails = $this->Request->find('first', array('conditions' => array('Request.id' => $requestID), 'fields' => array('text')));
     
     //if you don't belong, go 
     if($id == null || $requestID == null || !$this->Session->read("Auth.User.is_admin")){
@@ -149,7 +155,8 @@ class RecordsController extends AppController {
                   'ownerEmail' => $owner["User"]["email"],
                   'requestID' => $requestID,
                   'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
-                  'note' => $note["Note"]["text"]
+                  'note' => $note["Note"]["text"],
+                    'details' => $requestDetails["Request"]["text"]
               ))
               ->send();
         }

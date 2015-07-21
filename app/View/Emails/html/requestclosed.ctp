@@ -272,8 +272,15 @@
 						<h3>Public Records Request Closed</h3>
 						<p class="lead">A public records request from the <?php echo $agencyName; ?> that you are subscribed to has been closed. <!-- You can always view the update on the request page, <a href='<?php echo Router::fullbaseUrl().$page; ?>'><?php echo Router::fullbaseUrl().$page; ?></a> --></p>
             <p>The following note has been added to the request:</p>
-            <?php printf("<p class=\"callout\">%s</p>", nl2br($closed)); ?>
-
+            <?php 
+              printf("<p class=\"callout\">%s</p>", nl2br($closed));
+              
+              if(isset($details) && $details != ''){
+                echo "<p><strong>The original request is as follows</strong>:</p>";
+                printf("<p class=\"callout\">%s</p>", nl2br($details));
+              }
+              
+            ?>
 	
 						<!-- social & contact -->
 						<table width="100%">

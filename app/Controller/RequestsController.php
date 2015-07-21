@@ -602,7 +602,7 @@ class RequestsController extends AppController {
         $note["Note"]["user_id"] = $this->Session->read('Auth.User.id');
         if($this->Note->save($note)){
           $requestID = filter_var($id, FILTER_VALIDATE_INT);
-          
+          $requestDetails = $this->Request->find('first', array('conditions' => array('Request.id' => $requestID), 'fields' => array('text')));
           //get the subscribers
           $this->loadModel('Subscriber');
           $subscribers = $this->Subscriber->find('all', array(
@@ -632,7 +632,8 @@ class RequestsController extends AppController {
                       'ownerEmail' => $owner["User"]["email"],
                       'requestID' => $requestID,
                       'unsubscribe' =>'/requests/unsubscribe/'.$subscriber["Subscriber"]["id"],
-                      'note' => $note["Note"]["text"]
+                      'note' => $note["Note"]["text"],
+                      'details' => $requestDetails["Request"]["text"]
                   ))
                   ->send();
             }

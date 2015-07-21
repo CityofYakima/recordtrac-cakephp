@@ -277,14 +277,12 @@
                 echo "<p>The following note has been added to the request:</p>";
                 printf("<p class=\"callout\">%s</p>", nl2br($note));
               }
-            ?>
-            <?php
+
               if(isset($extend) && $extend != ''){
                 echo "<p><strong>The due date for this request has been extended</strong>:</p>";
                 printf("<p class=\"callout\">%s</p>", nl2br($extend));
               }
-            ?>
-            <?php
+
               if(isset($fileupload) && $fileupload != ''){
                 echo "<p>The following record was added to the request:</p>";
                 if($fileupload == 'url'){
@@ -295,6 +293,10 @@
                   $fileupload = sprintf("You can find the requested record at the following link:<br/> <a href=\"%s\">%s</a>", $url, $description);
                 }
                 printf("<p class=\"callout\">%s</p>", $fileupload );
+              }
+              if(isset($details) && $details != ''){
+                echo "<p><strong>The original request is as follows</strong>:</p>";
+                printf("<p class=\"callout\">%s</p>", nl2br($details));
               }
             ?>
 						<!-- social & contact -->
