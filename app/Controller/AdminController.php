@@ -224,6 +224,46 @@ class AdminController extends AppController {
     $this->set('months',$numberOfPosts);
   }
   
+  public function allrequestsbydate(){
+
+    $this->loadModel('User');
+    $this->set('users',$this->User->find('list', array('conditions' => 'User.department_id IS NOT NULL', 'fields' => array('id','alias'))));
+    
+    if(!empty($this->request->data)){
+      $dates = $this->request->data;
+      //change dates so that we can use em
+      if(isset($this->request->data["Admin"]["min_date"]) && $this->request->data["Admin"]["min_date"] != ''){
+        $minDate = filter_var($this->request->data["Admin"]["min_date"], FILTER_SANITIZE_STRING);
+        $cleanMinDate = explode("/",$minDate);
+        $cleanMinDate = $cleanMinDate[2]."-".$cleanMinDate[0]."-".$cleanMinDate[1]." 00:00:00";
+        $conditions["and"][] = "Request.date_received > '$cleanMinDate'";
+      }
+      if(isset($this->request->data["Admin"]["max_date"]) && $this->request->data["Admin"]["max_date"] != ''){
+        $maxDate = filter_var($this->request->data["Admin"]["max_date"], FILTER_SANITIZE_STRING);
+        $cleanMaxDate = explode("/",$maxDate);
+        $cleanMaxDate = $cleanMaxDate[2]."-".$cleanMaxDate[0]."-".$cleanMaxDate[1]." 00:00:00";
+        $conditions["and"][] = "Request.date_received < '$cleanMaxDate'";
+      }
+      if(isset($cleanMaxDate) && isset($cleanMinDate)){
+        $conditions["and"][] = "(Request.date_received BETWEEN '$cleanMinDate' AND '$cleanMaxDate')";
+      }
+
+      $this->loadModel('Request');
+      $requests = $this->Request->find('all', array('conditions' => $conditions));
+
+      //echo count($requests);
+      if(count($requests) >0){
+        $this->response->type('application/pdf');
+        $this->set(compact('requests'));
+        $this->set(compact('dates'));
+        $this->layout = '/pdf/default';
+        $this->render('/Pdf/all_requests_by_date_report');
+      }else{
+        $this->Session->setFlash('No requests found. Please choose another date range.', 'danger');
+      }
+    }
+  }
+  
   public function allrequestsbyrequester(){
     
     if(!empty($this->request->data)){
